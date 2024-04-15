@@ -22,6 +22,16 @@ class _FoodSearchAppState extends State<FoodSearchApp> {
   bool _isLoading = false;
 
   Future<void> _searchFood() async {
+    final searchTerm = _controller.text.trim();
+
+    if (searchTerm.isEmpty) {
+      // Clear search results if search term is empty
+      setState(() {
+        _searchResults.clear();
+      });
+      return;
+    }
+
     setState(() {
       _searchTerm = _controller.text;
       _isLoading = true; // Start loading
@@ -68,7 +78,7 @@ class _FoodSearchAppState extends State<FoodSearchApp> {
           Center(
             child: Container(
               width: 300, // Adjust the width as needed
-              padding: EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.grey),
@@ -98,15 +108,15 @@ class _FoodSearchAppState extends State<FoodSearchApp> {
           if (_isLoading)
             const Center(
               child: Padding(
-                padding: const EdgeInsets.all(20.0), // Adjust padding as needed
+                padding: EdgeInsets.all(20.0), // Adjust padding as needed
                 child:
                     CircularProgressIndicator(), // Show loading indicator if searching
               ),
             ) // Show loading indicator if searching
-          else if (_searchResults.isEmpty)
+          else if (_searchResults.isEmpty && _searchTerm.isNotEmpty)
             const Center(
                 child: Padding(
-              padding: const EdgeInsets.all(20.0), // Adjust padding as needed
+              padding: EdgeInsets.all(20.0), // Adjust padding as needed
               child: Text(
                 'No results found',
                 style: TextStyle(fontSize: 18),
